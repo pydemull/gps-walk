@@ -1,7 +1,7 @@
 
 # Functions for plotting all the GPS data (map, coordinates, speed) 
     
-    plot_gps_coord <- function(data, mininum_bout_duration_s = 15, include_map = "no") {
+    plot_gps_coord <- function(data, mininum_bout_duration_s = 15) {
           
           
           #####################################################
@@ -119,55 +119,22 @@
              # Making the figure
              ###################
              
-           if (include_map == "yes"){
-            
             
               # Getting the map
             
-              map <- get_map(location = c(Longitude = mean(df_proc_marked$Longitude), Latitude = mean(df_proc_marked$Latitude)), zoom = 15, source = "google")
-              
-              coord <- ggmap(map, extent = "normal") + 
-                scale_x_continuous(limits = c(min(df_proc_marked$Longitude), max(df_proc_marked$Longitude))) +
-                scale_y_continuous(limits = c(min(df_proc_marked$Latitude), max(df_proc_marked$Latitude))) +
-                xlab("longitude") +
-                ylab("latitude") +
-                geom_point(data = filter(df_proc_marked, mark == "walk"),
-                           mapping = aes(x = Longitude, y = Latitude, fill = Bout), 
-                           shape = 21, size = 2, alpha = 0.4) +
-                scale_fill_viridis(name = "Walking bout", discrete = TRUE, option = "D")  +
-                geom_point(data = filter(df_proc_marked, mark == "walk")[1, ], mapping = aes(x = Longitude, y = Latitude), shape = 21, fill = "red", size = 5) +
-                geom_point(data = filter(df_proc_marked, mark == "walk")[length(filter(df_proc_marked, mark == "walk")$mark), ], 
-                           mapping = aes(x = Longitude, y = Latitude), 
-                           shape = 22, fill = "red", size = 5) +
-                theme(legend.position = "top",
-                      axis.title = element_blank(),
-                      axis.text = element_blank(),
-                      axis.ticks = element_blank()) +
-                guides(fill = guide_legend(override.aes = list(size = 3), ncol = 10))
-
-          } else {
-            
-            coord <- ggplot() +
-              scale_x_continuous(limits = c(min(df_proc_marked$Longitude), max(df_proc_marked$Longitude))) +
-              scale_y_continuous(limits = c(min(df_proc_marked$Latitude), max(df_proc_marked$Latitude))) +
-              xlab("longitude") +
-              ylab("latitude") +
-              geom_point(data = filter(df_proc_marked, mark == "walk"),
-                         mapping = aes(x = Longitude, y = Latitude, fill = Bout), 
-                         shape = 21, size = 2, alpha = 0.4) +
-              scale_fill_viridis(name = "Walking bout", discrete = TRUE, option = "D")  +
-              geom_point(data = filter(df_proc_marked, mark == "walk")[1, ], mapping = aes(x = Longitude, y = Latitude), shape = 21, fill = "red", size = 5) +
-              geom_point(data = filter(df_proc_marked, mark == "walk")[length(filter(df_proc_marked, mark == "walk")$mark), ], 
-                         mapping = aes(x = Longitude, y = Latitude), 
-                         shape = 22, fill = "red", size = 5) +
-              theme(legend.position = "top",
-                    axis.title = element_blank(),
-                    axis.text = element_blank(),
-                    axis.ticks = element_blank()) +
-              guides(fill = guide_legend(override.aes = list(size = 3), ncol = 10))
+            types <- filter(df_proc_marked, mark == "walk")$Bout %>% unique
+            pal <- leaflet::colorFactor(viridis_pal(option = "D")(nlevels((df_proc_marked$Bout))), domain = types)
+          
+            coord <- filter(df_proc_marked, mark == "walk") %>% 
+            leaflet() %>% 
+            addTiles() %>% 
+            addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius =1, color = ~pal(Bout), stroke = TRUE) %>% 
+            addMarkers(data = filter(df_proc_marked, mark == "walk")[1, ], lng = ~Longitude, lat = ~Latitude) %>% 
+            addMarkers(data = filter(df_proc_marked, mark == "walk")[length(filter(df_proc_marked, mark == "walk")$mark), ], 
+                       lng = ~Longitude, lat = ~Latitude)
             
             
-          }
+          
                     
           ###############   
           point_size <- 1

@@ -10,7 +10,7 @@
   library(tidyverse)
   library(lubridate)
   library(plotKML)
-  library(ggmap)
+  library(leaflet)
   library(viridis)
   library(patchwork)
   library(withr)
@@ -89,13 +89,12 @@
     
     p <- reactive ({
       req(input$upload)
-      p <-  plot_gps_coord(data = data_proc(), mininum_bout_duration_s = bout_duration(), include_map = "no")
+      p <-  plot_gps_coord(data = data_proc(), mininum_bout_duration_s = bout_duration())
     })
     
     # Displaying the reactive plots with the coordinates and the processed speed
-    output$map <- renderPlotly({
-      toWebGL(ggplotly(p()[[1]], tooltip = c("Bout", "Seconds", "Altitude", "Longitude", "Latitude")) %>% 
-        layout(orientation = "h", x = 0.5, y = 1) %>% hide_legend()) %>% config(displayModeBar = FALSE) 
+    output$map <- renderLeaflet({
+      p()[[1]]
     })
     
     output$coord <- renderPlotly({

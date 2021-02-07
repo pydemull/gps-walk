@@ -10,8 +10,8 @@
   library(tidyverse)
   library(lubridate)
   library(plotKML)
-  library(ggmap)
   library(viridis)
+  library(leaflet)
   library(patchwork)
   library(withr)
 
@@ -49,7 +49,7 @@
       
       # Second layout: Plots for the session data --------------------------------------------------------
       column(8,
-             plotlyOutput("map", height = "250px"),
+             leafletOutput("map", height = "250px"),
              plotlyOutput("coord", height = "550px")
       )
     ),
