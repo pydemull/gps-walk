@@ -188,14 +188,15 @@
     
     
     # Reset all the parameters ------------------------------------------------------------------
-    observeEvent(input$reset, {
-      updateNumericInput(session, "FilterStart", value = 0)
-      updateNumericInput(session, "FilterEnd", value = 120)
-      updateSliderInput(session, "HPF", value = 5)
-      updateSliderInput(session, "LPF", value = 2)
-      updateNumericInput(session, "min_duration", value = 15)
-      
+    observeEvent(input$reset,{
+      aggg_result = -1
+      if(aggg_result == -1)
+      {
+        session$reload()
+        return()
+      }
     })
+    
   }
 
 
