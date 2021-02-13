@@ -147,14 +147,15 @@
                                             ymax = max(df_proc_marked$Altitude), 
                                             fill = Bout), alpha = 0.4) +
             geom_point(aes(x = Seconds, y = Altitude), size = point_size) + 
+            scale_y_continuous(breaks = seq(min(df_proc_marked$Altitude), max(df_proc_marked$Altitude), (max(df_proc_marked$Altitude) - min(df_proc_marked$Altitude))/4)) +
+            scale_fill_viridis(name = "Walking bout", discrete = TRUE, option = "D")  +
+            geom_ribbon(aes(x = Seconds, ymin = min(df_proc_marked$Altitude), ymax = Altitude), fill = "grey70") +
             geom_segment(data = Selection, aes(x = start_new, xend = start_new, 
                                                y = min(df_proc_marked$Altitude), 
                                                yend = max(df_proc_marked$Altitude)),
                          color = "red", size = 0.8) + 
             geom_segment(data = Selection, aes(x = end_new, xend = end_new, y = min(df_proc_marked$Altitude), yend = max(df_proc_marked$Altitude)), 
                          color = "red", size = 0.8) + 
-            scale_y_continuous(breaks = seq(min(df_proc_marked$Altitude), max(df_proc_marked$Altitude), (max(df_proc_marked$Altitude) - min(df_proc_marked$Altitude))/4)) +
-            scale_fill_viridis(name = "Walking bout", discrete = TRUE, option = "D")  +
             theme_bw() +
             ylab("Alt. (m)") +
             xlab("Time (s)") +

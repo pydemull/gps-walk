@@ -196,9 +196,8 @@
       updateNumericInput(session, "min_duration", value = 15)
       
     })
-    
   }
-  
+
 
 
 
