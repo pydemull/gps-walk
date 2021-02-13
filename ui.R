@@ -34,7 +34,7 @@
     that are highlighted with colors. The app also provides a map with the positions measured during the session and that are colored in 
     relation to the corresponding detected walking bouts. Be carrefull of the altitude data that may be not accurate with non-differential GPS devices.
     When computing the final results, the user can choose to include or not the last detected walking bout for the calculation of the mean,
-             cv, min, and max of speed, walking distance, and walking time over the walking bouts.For now, the app can be used with .gpx DG100 files, 
+             cv, min, and max of speed, walking distance, and walking time over the walking bouts. For now, the app can be used with .gpx DG100 files, 
                        and .csv Qstarz files. Please see", tags$a(href="https://github.com/PYDM1989/gps-walk", "https://github.com/PYDM1989/gps-walk"), "for the full code of the app.
                        For a website allowing faster analysis (without manual analysis) for both GPS and accelerometer data, but withtout context information (map, coordinates), 
                        see the following website:", tags$a(href="https://mapam.ens-rennes.fr/", "https://mapam.ens-rennes.fr."))),
