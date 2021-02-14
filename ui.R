@@ -22,7 +22,7 @@
   ui <- fluidPage(
     tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
     shinyFeedback::useShinyFeedback(),
-    titlePanel("A shiny app to analyse walking GPS data"),
+    titlePanel("A shiny app to analyse GPS walking data"),
     fluidRow(wellPanel("The app allows the analysis of GPS data obtained during an outdoor walking session and provides 
     summarized results (eg, number of detected walking bouts, mean speed over the walking bouts, total walking 
     distance over the session, longest distance performed during a walking bout, etc.). The analysis consists of the methodology 
