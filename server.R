@@ -14,6 +14,7 @@
   library(viridis)
   library(patchwork)
   library(withr)
+  library(htmltools)
   sapply(list.files(pattern="[.]R$", path="R/", full.names=TRUE), source)
 
   
@@ -29,12 +30,16 @@
     data <- reactive({
       req(input$upload)
       
-      if (tools::file_ext(input$upload) == "csv") {
-        read.csv2(file = input$upload$datapath, sep = ",", dec = ".", head = TRUE) %>% gps_file_prep_qstarz()
+      if (tools::file_ext(input$upload) == "csv" && sum(str_count(names(read.csv2(file = input$upload$datapath, sep = ",", head = TRUE)), "SPEED")) == 1) {
+        read.csv2(file = input$upload$datapath, sep = ",", head = TRUE, dec = ".") %>% gps_file_prep_qstarz()
+      
+      } else if (tools::file_ext(input$upload) == "CSV" && sum(str_count(names(read.csv2(file = input$upload$datapath, sep = ",", head = TRUE, skip = 2)), "Speed..km.h.")) == 1) {
+        read.csv2(file = input$upload$datapath,  sep = ",", head = TRUE, dec = ".", skip = 2) %>% gps_file_prep_polar() 
         
       } else {
       readGPX(input$upload$datapath)$tracks[[1]][[1]] %>% gps_file_prep_dg100()
-        }
+      }
+        
       })
     
     # Setting the time period and the paramaters required for computing the speed data filter
@@ -187,7 +192,7 @@
     )
     
     
-    # Reset all the parameters ------------------------------------------------------------------
+    # Reset app ------------ ------------------------------------------------------------------------
     observeEvent(input$reset,{
       aggg_result = -1
       if(aggg_result == -1)

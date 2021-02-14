@@ -9,8 +9,8 @@
               data$speed.1 <- vector("double", length(data$speed))
               
               for (i in 1:length(data$speed)) {
-                if (data$speed[i] > LPF) {
-                data$speed.1[i] <- mean(c(data$speed[i+1], data$speed[i+2], data$speed[i+3], data$speed[i+4], data$speed[i+5]))  
+                if (is.na(data$speed[i]) == FALSE && data$speed[i] > LPF) {
+                data$speed.1[i] <- mean(c(data$speed[i+1], data$speed[i+2], data$speed[i+3], data$speed[i+4], data$speed[i+5]), na.rm = TRUE)  
                 } else {
                 data$speed.1[i] <- data$speed[i]
                }
@@ -28,7 +28,7 @@
              
               for (i in 2:length(data$speed)) {
                 if (data$speed.2[i-1] == 0 && data$speed.2[i] > 0) {
-                  data$speed.3[i] <- mean(c(data$speed.2[i+1], data$speed.2[i+2], data$speed.2[i+3], data$speed.2[i+4], data$speed.2[i+5]))
+                  data$speed.3[i] <- mean(c(data$speed.2[i+1], data$speed.2[i+2], data$speed.2[i+3], data$speed.2[i+4], data$speed.2[i+5]), na.rm = TRUE)
                 } else {
                   data$speed.3[i] <- data$speed.2[i] 
                 }
@@ -42,7 +42,7 @@
               
               for (i in 3:(length(data$speed) - 3)) {
                 if(data$speed.3[i-2] > 0 && data$speed.3[i-1] > 0 && data$speed.3[i] == 0 && data$speed.3[i+2] > 0 && data$speed.3[i+3] > 0) {
-                  data$speed.4[i] <- mean(c(data$speed.3[i-2], data$speed.3[i-1], data$speed.3[i+2], data$speed.3[i+3]))
+                  data$speed.4[i] <- mean(c(data$speed.3[i-2], data$speed.3[i-1], data$speed.3[i+2], data$speed.3[i+3]), na.rm = TRUE)
                 } else {
                   data$speed.4[i] <- data$speed.3[i] 
                 }
@@ -59,7 +59,7 @@
               
               for (i in 3:(length(data$speed) - 3)) {
                 if(data$speed.4[i-2] > 0 && data$speed.4[i-1] > 0 && data$speed.4[i] == 0 && data$speed.4[i+2] > 0 && data$speed.4[i+3] > 0) {
-                  data$speed.5[i] <- mean(c(data$speed.4[i-2], data$speed.4[i-1], data$speed.4[i+2], data$speed.4[i+3]))
+                  data$speed.5[i] <- mean(c(data$speed.4[i-2], data$speed.4[i-1], data$speed.4[i+2], data$speed.4[i+3]), na.rm = TRUE)
                 } else {
                   data$speed.5[i] <- data$speed.4[i] 
                 }
@@ -76,7 +76,7 @@
               
               for (i in 3:(length(data$speed) - 3)) {
                 if(data$speed.5[i-2] == 0 && data$speed.5[i-1] == 0 && data$speed.5[i] > 0 && data$speed.5[i+2] == 0 && data$speed.5[i+3] == 0) {
-                  data$speed.6[i] <- mean(c(data$speed.5[i-2], data$speed.5[i-1], data$speed.5[i+2], data$speed.5[i+3]))
+                  data$speed.6[i] <- mean(c(data$speed.5[i-2], data$speed.5[i-1], data$speed.5[i+2], data$speed.5[i+3]), na.rm = TRUE)
                 } else {
                   data$speed.6[i] <- data$speed.5[i] 
                 }
@@ -93,7 +93,7 @@
               
               for (i in 3:(length(data$speed) - 3)) {
                 if(data$speed.6[i-2] == 0 && data$speed.6[i-1] == 0 && data$speed.6[i] > 0 && data$speed.6[i+2] == 0 && data$speed.6[i+3] == 0) {
-                  data$speed.proc[i] <- mean(c(data$speed.6[i-2], data$speed.6[i-1], data$speed.6[i+2], data$speed.6[i+3]))
+                  data$speed.proc[i] <- mean(c(data$speed.6[i-2], data$speed.6[i-1], data$speed.6[i+2], data$speed.6[i+3]), na.rm = TRUE)
                 } else {
                   data$speed.proc[i] <- data$speed.6[i] 
                 }

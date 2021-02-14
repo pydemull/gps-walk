@@ -35,7 +35,8 @@
     relation to the corresponding detected walking bouts. Be carrefull of the altitude data that may be not accurate with non-differential GPS devices.
     When computing the final results, the user can choose to include or not the last detected walking bout for the calculation of the mean,
              cv, min, and max of speed, walking distance, and walking time over the walking bouts. For now, the app can be used with .gpx DG100 files, 
-                       and .csv Qstarz files. Please see", tags$a(href="https://github.com/PYDM1989/gps-walk", "https://github.com/PYDM1989/gps-walk"), "for the full code of the app.
+                       .csv Qstarz files, and .CSV V800/M430 files (for now, latitude and longitude are not available for this last type of data files). 
+                       Please reset the app before analysing a new file, and see", tags$a(href="https://github.com/PYDM1989/gps-walk", "https://github.com/PYDM1989/gps-walk"), "for the full code of the app.
                        For a website allowing faster analysis (without manual analysis) for both GPS and accelerometer data, but withtout context information (map, coordinates), 
                        see the following website:", tags$a(href="https://mapam.ens-rennes.fr/", "https://mapam.ens-rennes.fr."))),
     
@@ -46,7 +47,7 @@
       ),
     ),
     
-    # Second layout: Parameters for configurating the analysis of the speed data -------------------------
+    # Second layout, left: Parameters for configurating the analysis of the speed data -------------------------
     fluidRow(
       column(4,
              wellPanel(
@@ -59,13 +60,13 @@
              ),
       ),
       
-   # Second layout: Plot for the map -------------------------------------------------------------------
+   # Second layout, right: Plot for the map ------------------------------------------------------------------------
       column(8,
              leafletOutput("map", height = "400px"),
       )
     ),
     
-    # Third layout : Parameters for configurating the analysis of the speed data ----------------------
+    # Third layout, left : Parameters for configurating the analysis of the speed data------------------------------------
     fluidRow(
       column(4,
              wellPanel(
@@ -80,13 +81,13 @@
              )
       ),
 
-    # Third layout bis: Plots for the coordinates and speed --------------------------------------------
+    # Third layout, right: Plots for the coordinates and speed ----------------------------------------------------------
       column(8,
              plotlyOutput("coord", height = "500px")
       ),
     ),
     
-    # Fourth layout: Table and plot for the detected periods ---------------------------------------------
+    # Fourth layout: Table and plot for the detected periods -----------------------------------------------
     fluidRow(
       column(6,
              reactableOutput("Selection")
