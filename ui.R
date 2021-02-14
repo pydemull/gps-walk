@@ -37,7 +37,7 @@
              cv, min, and max of speed, walking distance, and walking time over the walking bouts. For now, the app can be used with .gpx DG100 files, 
                        .csv Qstarz files, and .CSV V800/M430 files (for now, latitude and longitude are not available for this last type of data files). 
                        Please reset the app before analysing a new file, and see", tags$a(href="https://github.com/PYDM1989/gps-walk", "https://github.com/PYDM1989/gps-walk"), "for the full code of the app.
-                       For a website allowing faster analysis (without manual analysis) for both GPS and accelerometer data, but withtout context information (map, coordinates), 
+                       For a website allowing faster analysis (without manual analysis) for both GPS and accelerometer data, but without context information (map, coordinates), 
                        see the following website:", tags$a(href="https://mapam.ens-rennes.fr/", "https://mapam.ens-rennes.fr."))),
     
     # First layout: Data loading ------------------------------------------------------------------------
