@@ -56,7 +56,7 @@
                actionButton("update", "View data / Update Period", class = "btn-success", width = "100%")
              ),
              wellPanel(
-               textOutput("CV"), style = "padding-left:18px;padding-top:80px;font-size: 40px"
+               textOutput("CV"), style = "padding-left:18px;padding-top:80px;font-size: 30px"
              ),
       ),
       
