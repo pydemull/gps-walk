@@ -141,7 +141,7 @@
                 "Seconds:", df_proc_marked$Seconds
               ) %>% lapply(htmltools::HTML)
             
-          coord <- filter(df_proc_marked, mark == "walk") %>% 
+          coord <- filter(df_proc_marked) %>% 
             leaflet() %>% 
             addTiles() %>% 
             addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius =1, color = ~pal(Bout), stroke = TRUE, label = labels) %>%
