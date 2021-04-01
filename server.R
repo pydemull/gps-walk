@@ -182,12 +182,22 @@
     })  
     
     # Downloading results  
-    output$download <- downloadHandler(
+    output$downloadRes <- downloadHandler(
       filename = function() {
         paste0(input$upload, "_results.csv")
       },
       content = function(file) {
         write_csv2(results(), file)
+      }
+    )
+    
+    # Downloading periods  
+    output$downloadPer <- downloadHandler(
+      filename = function() {
+        paste0(input$upload, "_periods.csv")
+      },
+      content = function(file) {
+        write_csv2(Selection(), file)
       }
     )
     

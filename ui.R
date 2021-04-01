@@ -77,7 +77,8 @@
              wellPanel(
                checkboxInput("IncludeWalk", "Include the last walk in analysis", value = FALSE),
                div(style="display:inline-block",  actionButton("Run", "Run / Update Analysis", class = "btn-success")),
-               div(style="display:inline-block", downloadButton("download", label = "Download Final Results", style = "width:100%;"))
+               div(style="display:inline-block", downloadButton("downloadRes", label = "Download Final Results", style = "width:100%;")),
+               div(style="display:inline-block", downloadButton("downloadPer", label = "Download Periods", style = "width:100%;"))
              )
       ),
 
