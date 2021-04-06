@@ -120,7 +120,7 @@
            #################
              
             
-              # Getting the map
+           # Getting the map
             
               types <- filter(df_proc_marked, mark == "walk")$Bout %>% unique
               pal <- leaflet::colorFactor(viridis_pal(option = "D")(nlevels((df_proc_marked$Bout))), domain = types)
@@ -141,7 +141,7 @@
                 "Seconds:", df_proc_marked$Seconds
               ) %>% lapply(htmltools::HTML)
             
-          coord <- filter(df_proc_marked) %>% 
+          p1 <- filter(df_proc_marked) %>% 
             leaflet() %>% 
             addTiles() %>% 
             addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius =1, color = ~pal(Bout), stroke = TRUE, label = labels) %>%
@@ -151,100 +151,99 @@
                        lng = ~Longitude, lat = ~Latitude, label = htmlEscape("End"), icon = icon_end)
             
             
-          
+        
+          # Getting the alt, long, lat, and speed data        
                     
-          ############################################################  
-          point_size <- 1 # Setting the size of the marks on the plots
-          ############################################################
-                    
-                    
-          ele <- ggplot(data = df_proc_marked) +
-            geom_rect(data = Selection, aes(xmin = start_new, xmax =  end_new, 
-                                            ymin = min(df_proc_marked$Altitude), 
-                                            ymax = max(df_proc_marked$Altitude), 
-                                            fill = Bout), alpha = 0.4) +
-            geom_point(aes(x = Seconds, y = Altitude), size = point_size) + 
-            scale_y_continuous(breaks = seq(min(df_proc_marked$Altitude), max(df_proc_marked$Altitude), (max(df_proc_marked$Altitude) - min(df_proc_marked$Altitude))/4)) +
-            scale_fill_viridis(name = "Walking bout", discrete = TRUE, option = "D")  +
-            geom_ribbon(aes(x = Seconds, ymin = min(df_proc_marked$Altitude), ymax = Altitude), fill = "grey70") +
-            geom_segment(data = Selection, aes(x = start_new, xend = start_new, 
-                                               y = min(df_proc_marked$Altitude), 
-                                               yend = max(df_proc_marked$Altitude)),
-                         color = "red", size = 0.8) + 
-            geom_segment(data = Selection, aes(x = end_new, xend = end_new, y = min(df_proc_marked$Altitude), yend = max(df_proc_marked$Altitude)), 
-                         color = "red", size = 0.8) + 
-            theme_bw() +
-            ylab("Alt. (m)") +
-            xlab("Time (s)") +
-            theme(legend.position = "right",
-                  axis.title.x =  element_blank(),
-                  axis.text.x = element_blank(),
-                  axis.ticks = element_blank()) +
-            coord_cartesian(expand = FALSE)  
           
-          lon <- ggplot(data = df_proc_marked) +
-            geom_rect(data = Selection, aes(xmin = start_new, xmax =  end_new, 
-                                            ymin = min(df_proc_marked$Longitude), 
-                                            ymax = max(df_proc_marked$Longitude), 
-                                            fill = Bout), alpha = 0.4) +
-            geom_point(aes(x = Seconds, y = Longitude), size = point_size) + 
-            geom_segment(data = Selection, aes(x = start_new, xend = start_new, y = min(df_proc_marked$Longitude), yend = max(df_proc_marked$Longitude)), 
-                         color = "red", size = 0.8) + 
-            geom_segment(data = Selection, aes(x = end_new, xend = end_new, y = min(df_proc_marked$Longitude), yend = max(df_proc_marked$Longitude)), 
-                         color = "red", size = 0.8) + 
-            scale_fill_viridis(name = "Walking bout", discrete = TRUE, option = "D")  +
-            ylab("Lon.") +
-            xlab("Time (s)") +
-            theme_bw() +
-            theme(legend.position = "right",
-                  axis.title.x =  element_blank(),
-                  axis.text.x = element_blank(),
-                  axis.ticks = element_blank()) +
-            coord_cartesian(expand = FALSE)        
+          min_Time <- min(df_proc_marked$Seconds)
+          max_Time <- max(df_proc_marked$Seconds)
+          min_Alt <- min(df_proc_marked$Altitude)
+          max_Alt <- max(df_proc_marked$Altitude)
+          min_Lon <- min(df_proc_marked$Longitude)
+          max_Lon <- max(df_proc_marked$Longitude)
+          min_Lat <- min(df_proc_marked$Latitude)
+          max_Lat <- max(df_proc_marked$Latitude)
+          min_Speed <- min(df_proc_marked$Speed.proc)
+          max_Speed <- max(df_proc_marked$Speed)
           
-          lat <- ggplot(data = df_proc_marked) +
-            geom_rect(data = Selection, aes(xmin = start_new, xmax =  end_new, 
-                                            ymin = min(df_proc_marked$Latitude), 
-                                            ymax = max(df_proc_marked$Latitude), 
-                                            fill = Bout), alpha = 0.4) +
-            geom_point(aes(x = Seconds, y = Latitude), size = point_size) + 
-            geom_segment(data = Selection, aes(x = start_new, xend = start_new, y = min(df_proc_marked$Latitude), yend = max(df_proc_marked$Latitude)), 
-                         color = "red", size = 0.8) + 
-            geom_segment(data = Selection, aes(x = end_new, xend = end_new, y = min(df_proc_marked$Latitude), yend = max(df_proc_marked$Latitude)), 
-                         color = "red", size = 0.8) + 
-            scale_fill_viridis(name = "Walking bout", discrete = TRUE, option = "D")  +
-            ylab("Lat.") +
-            xlab("Time (s)") +
-            theme_bw() +
-            theme(legend.position = "right",
-                  axis.title.x =  element_blank(),
-                  axis.text.x = element_blank(),
-                  axis.ticks = element_blank()) +
-            coord_cartesian(expand = FALSE)
+          col_viridis <- viridis_pal(option = "D")(nlevels(df_proc_marked$Bout))
           
-          speed <- ggplot(data = df_proc_marked) +
-            geom_rect(data = Selection, aes(xmin = start_new, xmax =  end_new, ymin = min(df_proc_marked$Speed.proc, na.rm = TRUE), ymax = max(df_proc_marked$Speed, na.rm = TRUE), 
-                                            fill = Bout), alpha = 0.4) +
-            geom_line(aes(x = Seconds, y = Speed), color = "#999999", size = 0.8) +
-            geom_line(aes(x = Seconds, y = Speed.proc), size = 0.8) +
-            geom_segment(data = Selection, aes(x = start_new, xend = start_new, y = min(df_proc_marked$Speed.proc, na.rm = TRUE), yend = max(df_proc_marked$Speed, na.rm = TRUE)), 
-                         color = "red", size = 0.8) + 
-            geom_segment(data = Selection, aes(x = end_new, xend = end_new, y = min(df_proc_marked$Speed.proc, na.rm = TRUE), yend = max(df_proc_marked$Speed, na.rm = TRUE)), 
-                         color = "red", size = 0.8) + 
-            scale_fill_viridis(name = "Walking bout", discrete = TRUE, option = "D")  +
-            xlab("Time (s)") +
-            ylab(" Speed (km/h)") +
-            theme(legend.position="right") +
-            theme_bw() +
-            coord_cartesian(expand = FALSE)
+          ele <- 
+            plot_ly(df_proc_marked) %>%
+            add_lines(x = ~Seconds, y = max_Alt, fill = 'tozeroy', color = ~Bout, colors = col_viridis, showlegend = F, hovertemplate='Bout:') %>%
+            add_lines(x = ~Seconds, y = ~Altitude, color = I("black"), fill = 'tozeroy', fillcolor = "grey", showlegend = F, hovertemplate='Seconds: %{x} <br>Altitude: %{y}<extra></extra>') %>%
+            add_lines(x = ~Seconds, y = max_Alt, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_lines(x = ~Seconds, y = min_Alt, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_lines(x = min_Time, y = max_Alt, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_lines(x = max_Time, y = max_Alt, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_segments(x = Selection[["start_new"]], xend = Selection[["start_new"]], y = min_Alt, yend = max_Alt, color = I("red"), showlegend = F, hoverinfo='skip') %>%
+            add_segments(x = Selection[["end_new"]], xend = Selection[["end_new"]], y = min_Alt, yend = max_Alt, color = I("red"), showlegend = F, hoverinfo='skip') %>%
+            layout(xaxis = list(title = "", range = c(min_Time, max_Time), showline = TRUE, showticklabels = FALSE, mirror = "ticks"), 
+                   yaxis = list(title = "Alt. (m)", range = c(min_Alt, max_Alt), showline = TRUE, mirror = "ticks"))
+          lon <- 
+            plot_ly(df_proc_marked) %>%
+            add_lines(x = ~Seconds, y = max_Lon, fill = "tozeroy", color = ~Bout, colors = col_viridis, showlegend = F, hovertemplate='Bout:') %>%
+            add_lines(x = ~Seconds, y = min_Lon, fill = "tozeroy", color = ~Bout, colors = col_viridis, showlegend = F, hoverinfo='skip') %>%
+            add_lines(x = ~Seconds, y = ~Longitude, color = I("black"), showlegend = F, hovertemplate='Seconds: %{x} <br>Longitude: %{y}<extra></extra>') %>%
+            add_lines(x = ~Seconds, y = max_Lon,  color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_lines(x = ~Seconds, y = min_Lon, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_lines(x = min_Time, y = max_Lon, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_lines(x = max_Time, y = max_Lon, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_segments(x = Selection[["start_new"]], xend = Selection[["start_new"]], y = min_Lon, yend = max_Lon, color = I("red"), showlegend = F, hoverinfo='skip') %>%
+            add_segments(x = Selection[["end_new"]], xend = Selection[["end_new"]], y = min_Lon, yend = max_Lon, color = I("red"), showlegend = F, hoverinfo='skip') %>%
+            layout(xaxis = list(title = "", range = c(min_Time, max_Time), showline = TRUE, showticklabels = FALSE, mirror = "ticks"), 
+                   yaxis = list(title = "Lon.",  range = c(min_Lon, max_Lon), showline = TRUE, mirror = "ticks"))
+          lat <- 
+            plot_ly(df_proc_marked) %>%
+            add_lines(x = ~Seconds, y = max_Lat, fill = 'tozeroy', color = ~Bout, colors = col_viridis, showlegend = F, hovertemplate='Bout:') %>%
+            add_lines(x = ~Seconds, y = min_Lat, fill = 'tozeroy', color = ~Bout, colors = col_viridis, showlegend = F, hoverinfo ='skip') %>%
+            add_lines(x = ~Seconds, y = ~Latitude, color = I("black"), showlegend = F, hovertemplate='Seconds: %{x} <br>Latitude: %{y}<extra></extra>') %>%
+            add_lines(x = ~Seconds, y = max_Lat, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_lines(x = ~Seconds, y = min_Lat, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_lines(x = min_Time, y = max_Lat, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_lines(x = max_Time, y = max_Lat, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_segments(x = Selection[["start_new"]], xend = Selection[["start_new"]], y = min_Lat, yend = max_Lat, color = I("red"), showlegend = F, hoverinfo='skip') %>%
+            add_segments(x = Selection[["end_new"]], xend = Selection[["end_new"]], y = min_Lat, yend = max_Lat, color = I("red"), showlegend = F, hoverinfo='skip') %>%
+            layout(xaxis = list(title = "", range = c(min_Time, max_Time), showline = TRUE, showticklabels = FALSE, mirror = "ticks"), 
+                   yaxis = list(title = "Lat.",  range = c(min_Lat, max_Lat), showline = TRUE, mirror = "ticks"))
           
-          ele <- ele + theme(legend.position ="none")
-          lon <- lon + theme(legend.position ="none")
-          lat <- lat + theme(legend.position ="none")
-          speed <- speed + theme(legend.position ="none")
+          speed <-
+            plot_ly(df_proc_marked) %>%
+            add_lines(x = ~Seconds, y = max_Speed, fill = 'tozeroy', color = ~Bout, colors = col_viridis, showlegend = F, hovertemplate='Bout:') %>%
+            add_lines(x = ~Seconds, y = ~Speed, color = I("grey"), showlegend = F, hoverinfo ='skip') %>%
+            add_lines(x = ~Seconds, y = ~Speed.proc, color = I("black"), showlegend = F, hovertemplate='Seconds: %{x} <br>Speed.proc: %{y}<extra></extra>') %>%
+            add_lines(x = ~Seconds, y = max_Speed, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_lines(x = ~Seconds, y = min_Speed, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_lines(x = min_Time, y = max_Speed, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_lines(x = max_Time, y = max_Speed, color = I("black"), hoverinfo='skip', showlegend = F) %>%
+            add_segments(x = Selection[["start_new"]], xend = Selection[["start_new"]], y = min_Speed, yend = max_Speed, color = I("red"), showlegend = F, hoverinfo='skip') %>%
+            add_segments(x = Selection[["end_new"]], xend = Selection[["end_new"]], y = min_Speed, yend = max_Speed, color = I("red"), showlegend = F, hoverinfo='skip') %>%
+            layout(xaxis = list(title = "Time (s)", range = c(min_Time, max_Time)), 
+                   yaxis = list(title = "Speed (km/h)",  range = c(min_Speed, max_Speed), showline = TRUE, mirror = "ticks"))
           
-          list(coord, ele, lon, lat, speed)
-
+          p2 <- subplot(
+                    ele,
+                    lon,
+                    lat,
+                    with_options(list(digits = 1), speed) %>% 
+                      layout(colorway=col_viridis,
+                             hovermode = "x", spikedistance = 100,
+                             xaxis = list(
+                               showspikes = TRUE,
+                               spikemode  = 'across+toaxis',
+                               spikethickness=1, 
+                               spikesnap = 'cursor',
+                               spikedash = 'solid',
+                               showline=TRUE,
+                               showgrid=TRUE,
+                               spikedistance = -1)), 
+            shareX = TRUE, titleY = TRUE, nrows = 4) %>% 
+            config(displayModeBar = FALSE)
+          
+          
+          
+          
+          list(p1, p2)
         }
 
     

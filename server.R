@@ -1,24 +1,5 @@
 
   #######################################################################################################
-  # Required packages and functions
-  #######################################################################################################
-  
-  library(shiny)
-  library(shinyFeedback)
-  library(plotly)
-  library(reactable)
-  library(tidyverse)
-  library(lubridate)
-  library(plotKML)
-  library(leaflet)
-  library(viridis)
-  library(patchwork)
-  library(withr)
-  library(htmltools)
-  sapply(list.files(pattern="[.]R$", path="R/", full.names=TRUE), source)
-
-  
-  #######################################################################################################
   # Server
   #######################################################################################################
   
@@ -44,12 +25,12 @@
     
     # Setting the time period and the paramaters required for computing the speed data filter
     Filter_Start <- eventReactive(input$update, {
-      (input$FilterStart)
-    })
+      (input$FilterStart) 
+    }) 
     
     Filter_End <- eventReactive(input$update, {
-      (input$FilterEnd)
-    })
+      (input$FilterEnd) 
+    }) 
     
     observeEvent(input$update,
                  shinyFeedback::feedbackWarning(
@@ -77,25 +58,25 @@
     
     # Setting the speed data filter
     LPF <- reactive({
-      input$LPF * mean_speed()
-    })
+      input$LPF * mean_speed() 
+    }) 
     
     HPF <- reactive({
-      mean_speed() - input$HPF * sd_speed()
-    })
+      mean_speed() - input$HPF * sd_speed() 
+    }) 
     
     # Getting the reactive dataset with the processed speed
     data_proc <- reactive({
-      speed_proc(data = data(), LPF = LPF(), HPF = HPF())
+      speed_proc(data = data(), LPF = LPF(), HPF = HPF())  
     })
     
     # Getting the reactive plots with the coordinates and the processed speed
-    bout_duration <- reactive(input$min_duration)
+    bout_duration <- reactive(input$min_duration) 
     
     p <- reactive ({
       req(input$upload)
       p <-  plot_gps_coord(data = data_proc(), mininum_bout_duration_s = bout_duration())
-    })
+    }) 
     
     # Displaying the reactive plots with the coordinates and the processed speed
     output$map <- renderLeaflet({
@@ -103,23 +84,7 @@
     })
     
     output$coord <- renderPlotly({
-      subplot(
-        toWebGL(ggplotly(p()[[2]], tooltip = c("Bout", "Seconds", "Altitude"))),
-        toWebGL(ggplotly(p()[[3]], tooltip = c("Bout", "Seconds", "Longitude"))),
-        toWebGL(ggplotly(p()[[4]], tooltip = c("Bout", "Seconds", "Latitude"))),
-        toWebGL(with_options(list(digits = 1), ggplotly(p()[[5]], tooltip = c("Bout", "Seconds", "Speed.proc", "Speed"))) %>% 
-          layout(hovermode = "x", spikedistance = 100,
-                 xaxis = list(
-                   showspikes = TRUE,
-                   spikemode  = 'across+toaxis',
-                   spikethickness=1, 
-                   spikesnap = 'cursor',
-                   spikedash = 'solid',
-                   showline=TRUE,
-                   showgrid=TRUE,
-                   spikedistance = -1))), 
-        shareX = TRUE, titleY = TRUE, nrows = 4) %>% 
-        config(displayModeBar = FALSE) 
+        p()[[2]]
     })
     
     

@@ -1,20 +1,21 @@
 
-  #######################################################################################################
-  # Required packages and functions
-  #######################################################################################################
-  
-  library(shiny)
-  library(shinyFeedback)
-  library(plotly)
-  library(reactable)
-  library(tidyverse)
-  library(lubridate)
-  library(plotKML)
-  library(viridis)
-  library(leaflet)
-  library(patchwork)
-  library(withr)
+#######################################################################################################
+# Required packages and functions
+#######################################################################################################
 
+library(shiny)
+library(shinyFeedback)
+library(plotly)
+library(reactable)
+library(tidyverse)
+library(lubridate)
+library(plotKML)
+library(leaflet)
+library(viridis)
+library(withr)
+library(htmltools)
+sapply(list.files(pattern="[.]R$", path="R/", full.names=TRUE), source)
+  
   #######################################################################################################
   # UI
   #######################################################################################################
@@ -117,7 +118,5 @@
 
   
   
-
-
-
+ 
 

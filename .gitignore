@@ -2,3 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
+.log
+.log.post0
+.jar
