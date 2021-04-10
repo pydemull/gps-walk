@@ -84,7 +84,7 @@
     })
     
     output$coord <- renderPlotly({
-        p()[[2]]
+      p()[[2]]
     })
     
     

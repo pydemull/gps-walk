@@ -6,6 +6,7 @@
 library(shiny)
 library(shinyFeedback)
 library(plotly)
+library(patchwork)
 library(reactable)
 library(tidyverse)
 library(lubridate)
