@@ -34,7 +34,7 @@ sourceCpp("R/cppfunc.cpp")
     to compute a representative mean and SD of speed for the session. Then, based on the coefficient of variation (CV) of speed,
     the user must configure a first filter (HPF) for the speed data (choose HPF = 2 when the CV is >15%, or HPF = 5 when the CV is <=15%, 
     or even higher than 5 when the CV is very low (eg, <5%); the value to choose for the second filter (LPF) is 2 in principle). To determine the period of time to be used to compute the CV of speed
-    and then the HPF, the user is helped by a reactive graphic of the coordinates and processed speed that are plotted against time, with the detected walking bouts 
+    and then the HPF, the user is helped by an interactive graphic of the coordinates and processed speed that are plotted against time, with the detected walking bouts 
     that are highlighted with colors. The app also provides a map with the positions measured during the session and that are colored in 
     relation to the corresponding detected walking bouts. Be carrefull of the altitude data that may be not accurate with non-differential GPS devices.
     When computing the final results, the user can choose to include or not the last detected walking bout for the calculation of the mean,
