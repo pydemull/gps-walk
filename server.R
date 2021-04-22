@@ -90,12 +90,12 @@
 # Displaying the reactive plots with the map, the coordinates and the processed speed -------------------------------------------------
         output$map <- renderLeaflet({
           req(input$upload)
-          plotly_map(df_proc_marked())
+          plot_map(df_proc_marked())
         })
         
         output$coord <- renderPlotly({
           req(input$upload)
-          plotly_coord(df_proc_marked(), periods_marked())
+          plot_coord(df_proc_marked(), periods_marked())
         })
         
     
