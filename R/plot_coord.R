@@ -1,5 +1,5 @@
 
-plotly_coord <- function(data, periods) {
+plot_coord <- function(data, periods) {
   
   df_proc_marked <- 
     data %>% 

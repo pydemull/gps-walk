@@ -1,5 +1,5 @@
 
-plotly_map <- function(data) {
+plot_map <- function(data) {
   
   df_proc_marked <- data
   types <- filter(df_proc_marked, mark == "walk")$Bout %>% unique
