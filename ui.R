@@ -15,11 +15,13 @@ library(leaflet)
 library(viridis)
 library(withr)
 library(htmltools)
+library(Rcpp)
 sapply(list.files(pattern="[.]R$", path="R/", full.names=TRUE), source)
-  
-  #######################################################################################################
-  # UI
-  #######################################################################################################
+sourceCpp("R/cppfunc.cpp")
+
+#######################################################################################################
+# UI
+#######################################################################################################
   
   ui <- fluidPage(
     tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
@@ -30,8 +32,8 @@ sapply(list.files(pattern="[.]R$", path="R/", full.names=TRUE), source)
     distance over the session, longest distance performed during a walking bout, etc.). The analysis consists of the methodology 
     proposed by Le Faucheur et al. (2007; DOI: 10.1249/mss.0b013e3180cc20c7). Briefly, the user must select a period of time (120 s if possible, or shorter) 
     to compute a representative mean and SD of speed for the session. Then, based on the coefficient of variation (CV) of speed,
-    the user must configure the high pass filter (HPF) for the speed data (choose HPF = 2 when the CV is >15%, or HPF = 5 when the CV is <=15%, 
-    or even higher than 5 when the CV is very low (eg, <5%); the value to choose for the low pass filter (LPF) is 2 in principle). To determine the period of time to be used to compute the CV of speed
+    the user must configure a first filter (HPF) for the speed data (choose HPF = 2 when the CV is >15%, or HPF = 5 when the CV is <=15%, 
+    or even higher than 5 when the CV is very low (eg, <5%); the value to choose for the second filter (LPF) is 2 in principle). To determine the period of time to be used to compute the CV of speed
     and then the HPF, the user is helped by a reactive graphic of the coordinates and processed speed that are plotted against time, with the detected walking bouts 
     that are highlighted with colors. The app also provides a map with the positions measured during the session and that are colored in 
     relation to the corresponding detected walking bouts. Be carrefull of the altitude data that may be not accurate with non-differential GPS devices.
@@ -42,14 +44,14 @@ sapply(list.files(pattern="[.]R$", path="R/", full.names=TRUE), source)
                        For a website allowing faster analysis (without manual analysis) for both GPS and accelerometer data, but without context information (map, coordinates), 
                        see the following website:", tags$a(href="https://mapam.ens-rennes.fr/", "https://mapam.ens-rennes.fr."))),
     
-    # First layout: Data loading ------------------------------------------------------------------------
+    # First layout: Data loading ----------------------------------------------------------------------------------------------
     fluidRow(
       column(3,
              fileInput("upload", NULL, placeholder = "Choose file...")
       ),
     ),
     
-    # Second layout, left: Parameters for configurating the analysis of the speed data -------------------------
+    # Second layout, left: Configuration of the period to use for setting the speed filters------------------------------------
     fluidRow(
       column(4,
              wellPanel(
@@ -62,18 +64,18 @@ sapply(list.files(pattern="[.]R$", path="R/", full.names=TRUE), source)
              ),
       ),
       
-   # Second layout, right: Plot for the map ------------------------------------------------------------------------
+   # Second layout, right: Plot for the map --------------------------------------------------------------------------------------
       column(8,
              leafletOutput("map", height = "400px"),
       )
     ),
     
-    # Third layout, left : Parameters for configurating the analysis of the speed data------------------------------------
+    # Third layout, left : Configuration of the coefficients to use for setting the speed filters and the minimum bout duration ----
     fluidRow(
       column(4,
              wellPanel(
-               sliderInput("HPF", "High Pass Filter (multiple of speed SD)", value = 5, min = 0, max = 20, step = 1),
-               sliderInput("LPF", "Low Pass Filter (mulitple of mean speed)", value = 2, min = 1, max = 3, step = 0.5),
+               sliderInput("HPF", "HPF (multiple of speed SD)", value = 5, min = 0, max = 20, step = 1),
+               sliderInput("LPF", "LPF (mulitple of mean speed)", value = 2, min = 1, max = 3, step = 0.5),
                numericInput("min_duration", "Minimum bout duration (s)", value = 15, min = 0, max = 60)
              ),
              wellPanel(
@@ -84,13 +86,13 @@ sapply(list.files(pattern="[.]R$", path="R/", full.names=TRUE), source)
              )
       ),
 
-    # Third layout, right: Plots for the coordinates and speed ----------------------------------------------------------
+    # Third layout, right: Plots for the coordinates and speed -------------------------------------------------------------------
       column(8,
              plotlyOutput("coord", height = "500px")
       ),
     ),
     
-    # Fourth layout: Table and plot for the detected periods -----------------------------------------------
+    # Fourth layout: Table and plot for the detected periods --------------------------------------------------------------------
     fluidRow(
       column(6,
              reactableOutput("Selection")
@@ -100,14 +102,14 @@ sapply(list.files(pattern="[.]R$", path="R/", full.names=TRUE), source)
       )
     ),
     
-    # Fifth layout: Final results -------------------------------------------------------------------------
+    # Fifth layout: Final results ----------------------------------------------------------------------------------------------
     fluidRow(
       column(12,
              reactableOutput("TableResults")
       )
     ),
     
-    # Sixth layout: Reset ---------------------------------------------------------------------------------
+    # Sixth layout: Reset ------------------------------------------------------------------------------------------------------
     fluidRow(
       column(4,
              wellPanel(

@@ -5,7 +5,7 @@
               
                 data1 <- data
                 
-                # Marking the bouts as "walk" (speed > 0) or "stop" (speed = 0)
+                # Marking the bouts
                 
                 data1$mark <- ifelse(data1$speed.proc == 0, "stop", "walk")
                 data1$bout <- vector("double", length(data1$mark))
@@ -20,7 +20,7 @@
                 }
                 
                 
-                # Getting the summarized data for each walking bout and stopping bout
+                # Getting summarized data for each walking bout and stopping bout
                 
                 data1 <- 
                   data1 %>%
@@ -51,7 +51,8 @@
                   }
                 }
                 
-                data1 <- data1 %>% 
+                data1 <- 
+                  data1 %>% 
                   mutate(speed = speed * duration) %>%
                   group_by(mark, bout) %>% 
                   summarize(start_time = min(start_time),
@@ -62,7 +63,7 @@
                   arrange(bout)
                 
                 
-                # Naming the the summarized dataset "Periods"
+                # Naming the summarized dataset "Periods"
                 
                 Periods <- data1 
                 return(Periods)
@@ -75,8 +76,8 @@
         
           data <- periods
           
-       # Removing the first stop period (i.e., the initial resting period) and the last stop period where appropriate.
-       # Deleting the last walking period depending on the configuration of the function (with this option, the last walking bout 
+       # Removing the first stopping bout (i.e., the initial resting period) and the last stopping bout where appropriate.
+       # Deleting the last walking bout depending on the configuration of the function (with this option, the last walking bout 
        # is kept if it corresponded to the greatest distance performed during a walking bout)
 
            if(data[1, "mark"] == "stop") data <- data[-1, ] 
@@ -182,7 +183,7 @@
     
     get_results_plot <- function(data, include_last_walk = "no") {
           
-          # Removing the first stop period (i.e., the initial resting period) and the last stop period where appropriate.
+          # Removing the first stopping bout (i.e., the initial resting period) and the last stopping bout where appropriate.
           # Deleting the last walking period depending on the configuration of the function (with this option, the last walking bout 
           # is kept if it corresponded to the greatest distance performed during a walking bout)
           
