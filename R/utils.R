@@ -24,15 +24,16 @@
               lon = LONGITUDE,
               ele = ALTITUDE,
               time = LOCAL.TIME) %>%
-       mutate(time = as.character(time),
-              seconds = as.numeric(as.duration(hms(time))),
-              time.interval.sec = seconds - lag(seconds, default = first(seconds)), 
-              time.cum.sec = cumsum(time.interval.sec),
-              ele = as.numeric(ele),
-              speed = round(as.numeric(speed)/1000*3600, digits = 1))
-     
+       mutate(time = as.POSIXct(time, format = "%H:%M:%S"))
+     data$time <- format(data$time, tz = "Europe/Paris")
+     data <- separate(data, time, c("date", "time"), sep = " ")
+     data <- data %>% mutate(seconds = as.numeric(as.duration(hms(time))),
+                             time.interval.sec = seconds - lag(seconds, default = first(seconds)), 
+                             time.cum.sec = cumsum(time.interval.sec),
+                             ele = as.numeric(ele),
+                             speed = round(as.numeric(speed)/1000*3600, digits = 1))
      return(data)
-     
+
    }
    
    gps_file_prep_polar <- function(data) {
