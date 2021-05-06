@@ -31,7 +31,7 @@
                              time.interval.sec = seconds - lag(seconds, default = first(seconds)), 
                              time.cum.sec = cumsum(time.interval.sec),
                              ele = as.numeric(ele),
-                             speed = round(as.numeric(speed)/1000*3600, digits = 1))
+                             speed = round(speed, digits = 1))
      return(data)
 
    }
@@ -49,7 +49,7 @@
               lat = 0,
               lon = 0,
               ele = as.numeric(ele),
-              speed = round(as.numeric(speed)/1000*3600, digits = 1))
+              speed = round(speed, digits = 1))
      
      return(data)
      
