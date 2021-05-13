@@ -73,9 +73,9 @@ sourceCpp("R/cppfunc.cpp")
     fluidRow(
       column(4,
              wellPanel(
-               sliderInput("HPF", "HPF (multiple of speed SD)", value = 5, min = 0, max = 20, step = 1),
+               sliderInput("HPF", "HPF (multiple of speed SD)", value = 2, min = 0, max = 20, step = 1),
                sliderInput("LPF", "LPF (mulitple of mean speed)", value = 2, min = 1, max = 3, step = 0.5),
-               numericInput("min_duration", "Minimum bout duration (s)", value = 15, min = 0, max = 60)
+               numericInput("min_duration", "Minimum bout duration (s)", value = 0, min = 0, max = 60)
              ),
              wellPanel(
                checkboxInput("IncludeWalk", "Include the last walk in analysis", value = FALSE),
