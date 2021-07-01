@@ -6,4 +6,4 @@ summarized results (eg, number of detected walking bouts, mean speed over the wa
 ## Acknowledgements
 Several great books were particularly useful to produce this app, in particular: Mastering shiny (https://mastering-shiny.org) by Hadley Wickham; and Interactive web-based data visualization with R, plotly, and shiny (https://plotly-r.com) by Carson Sievert. Lots of thanks also to the Stack Overflow community who produced some pieces of code that can be found in the final code of this app.
 
-Thanks to Alexis Le Faucheur who gave me the original Excel file related to his 2007 publication (DOI: 10.1249/mss.0b013e3180cc20c7) that allowed me to understand the details of the computation of the speed data filter that is implemented in this app.adding a line
+Thanks to Alexis Le Faucheur who gave me the original Excel file related to his 2007 publication (DOI: 10.1249/mss.0b013e3180cc20c7) that allowed me to understand the details of the computation of the speed data filter that is implemented in this app.
