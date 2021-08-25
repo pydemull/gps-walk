@@ -16,6 +16,7 @@ library(viridis)
 library(withr)
 library(htmltools)
 library(Rcpp)
+library(shinycssloaders)
 sapply(list.files(pattern="[.]R$", path="R/", full.names=TRUE), source)
 sourceCpp("R/cppfunc.cpp")
 
@@ -45,8 +46,10 @@ sourceCpp("R/cppfunc.cpp")
     
     # First layout: Data loading ----------------------------------------------------------------------------------------------
     fluidRow(
-      column(3,
-             fileInput("upload", NULL, placeholder = "Choose file...")
+      column(4,
+             wellPanel(
+             fileInput("upload", NULL, placeholder = "Choose file..."),
+             "Please wait until seeing 'Upload complete'.")
       ),
     ),
     
@@ -65,7 +68,7 @@ sourceCpp("R/cppfunc.cpp")
       
    # Second layout, right: Plot for the map --------------------------------------------------------------------------------------
       column(8,
-             leafletOutput("map", height = "400px"),
+             withSpinner(leafletOutput("map", height = "400px")),
       )
     ),
     
@@ -87,7 +90,7 @@ sourceCpp("R/cppfunc.cpp")
 
     # Third layout, right: Plots for the coordinates and speed -------------------------------------------------------------------
       column(8,
-             plotlyOutput("coord", height = "500px")
+             withSpinner(plotlyOutput("coord", height = "500px"))
       ),
     ),
     

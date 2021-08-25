@@ -17,11 +17,20 @@
         } else if (tools::file_ext(input$upload) == "CSV" && sum(str_count(names(read.csv2(file = input$upload$datapath, sep = ",", head = TRUE, skip = 2)), "Speed..km.h.")) == 1) {
           read.csv2(file = input$upload$datapath,  sep = ",", head = TRUE, dec = ".", skip = 2) %>% gps_file_prep_polar() 
           
-        } else {
+        } else if (tools::file_ext(input$upload) == "gpx") {
         readGPX(input$upload$datapath)$tracks[[1]][[1]] %>% gps_file_prep_dg100()
+        
+        } else {
+          validate("Please choose a data file format that the app can use (see note to user above). If the problem cannot be resolved, please contact the author of the app: pydemull@uco.fr.")
         }
-          
-        })
+        
+        
+    
+      
+        
+    })
+      
+    
     
     # Setting the time period and the paramaters required for computing the speed data filters
       Filter_Start <- eventReactive(input$update, {
@@ -52,6 +61,7 @@
       output$CV <- renderPrint({
         cat("The CV of speed is", round(sd_speed() / mean_speed() * 100, 2), "%.")
       })
+      
     
       
 # Creating the reactive speed data filters ------------------------------------------------------------------------------------
@@ -89,12 +99,12 @@
         
 # Displaying the reactive plots with the map, the coordinates and the processed speed -------------------------------------------------
         output$map <- renderLeaflet({
-          req(input$upload)
+          req(input$update)
           plot_map(df_proc_marked())
         })
         
         output$coord <- renderPlotly({
-          req(input$upload)
+          req(input$update)
           plot_coord(df_proc_marked(), periods_marked())
         })
         
@@ -179,7 +189,21 @@
     
     
     # Reset app ------------ ------------------------------------------------------------------------
-      observeEvent(input$reset,{
+      observeEvent(input$reset, {
+        
+        modal_confirm <- modalDialog(
+          "Are you sure you want to reset the app?",
+          title = "Reset app",
+          footer = tagList(
+            actionButton("cancel", "Cancel"),
+            actionButton("ok", "Reset", class = "btn btn-danger", style="color: #fff; background-color: #F8766D; border-color: #FC717F")
+          )
+        )
+        
+        showModal(modal_confirm)
+      })
+      
+      observeEvent(input$ok, {
         aggg_result = -1
         if(aggg_result == -1)
         {
@@ -187,8 +211,12 @@
           return()
         }
       })
-    
+      
+      observeEvent(input$cancel, {
+        removeModal()
+      })
   }
+  
 
 
 
