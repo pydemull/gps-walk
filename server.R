@@ -24,10 +24,6 @@
           validate("Please choose a data file format that the app can use (see note to user above). If the problem cannot be resolved, please contact the author of the app: pydemull@uco.fr.")
         }
         
-        
-    
-      
-        
     })
       
     
@@ -99,12 +95,10 @@
         
 # Displaying the reactive plots with the map, the coordinates and the processed speed -------------------------------------------------
         output$map <- renderLeaflet({
-          req(input$update)
           plot_map(df_proc_marked())
         })
         
         output$coord <- renderPlotly({
-          req(input$update)
           plot_coord(df_proc_marked(), periods_marked())
         })
         

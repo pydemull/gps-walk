@@ -27,7 +27,7 @@ sourceCpp("R/cppfunc.cpp")
   ui <- fluidPage(
     tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
     shinyFeedback::useShinyFeedback(),
-    titlePanel("A shiny app to analyse GPS walking data"),
+    titlePanel("GPS-WALK"),
     fluidRow(wellPanel("The app allows the analysis of GPS data obtained during an outdoor walking session and provides 
     summarized results (eg, number of detected walking bouts, mean speed over the walking bouts, total walking 
     distance over the session, longest distance performed during a walking bout, etc.). The analysis consists of the methodology 
@@ -49,26 +49,23 @@ sourceCpp("R/cppfunc.cpp")
       column(4,
              wellPanel(
              fileInput("upload", NULL, placeholder = "Choose file..."),
-             "Please wait until seeing 'Upload complete'.")
-      ),
-    ),
-    
+             "Please wait until seeing 'Upload complete'."
+             ),
+
     # Second layout, left: Configuration of the period to use for setting the speed filters------------------------------------
-    fluidRow(
-      column(4,
              wellPanel(
                numericInput("FilterStart", "Start of the period to consider to configure the speed filter (s)", value = 0),
                numericInput("FilterEnd", "End of the period to consider to configure the speed filter (s)", value = 120),
-               actionButton("update", "View data / Update Period", class = "btn-success", width = "100%")
              ),
              wellPanel(
-               textOutput("CV"), style = "padding-left:18px;padding-top:80px;font-size: 30px"
+               sliderInput("HPF", "HPF (multiple of speed SD)", value = 5, min = 0, max = 20, step = 1),
+               sliderInput("LPF", "LPF (mulitple of mean speed)", value = 2, min = 1, max = 3, step = 0.5)
              ),
       ),
-      
+
    # Second layout, right: Plot for the map --------------------------------------------------------------------------------------
       column(8,
-             withSpinner(leafletOutput("map", height = "400px")),
+             withSpinner(leafletOutput("map", height = "600px")),
       )
     ),
     
@@ -76,9 +73,13 @@ sourceCpp("R/cppfunc.cpp")
     fluidRow(
       column(4,
              wellPanel(
-               sliderInput("HPF", "HPF (multiple of speed SD)", value = 5, min = 0, max = 20, step = 1),
-               sliderInput("LPF", "LPF (mulitple of mean speed)", value = 2, min = 1, max = 3, step = 0.5),
                numericInput("min_duration", "Minimum bout duration (s)", value = 0, min = 0, max = 60)
+             ),
+             wellPanel(
+               textOutput("CV"), style = "padding-left:18px;padding-top:80px;font-size: 30px"
+             ),
+             wellPanel(
+               actionButton("update", "View data / Update Period", class = "btn-success", width = "100%")
              ),
              wellPanel(
                checkboxInput("IncludeWalk", "Include the last walk in analysis", value = FALSE),
